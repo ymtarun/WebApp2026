@@ -1,47 +1,29 @@
 pipeline {
-    agent any  // Use any available agent
+agent any // Use any available agent
 
-    tools {
-        maven 'Maven'  // Ensure this matches the name configured in Jenkins
-    }
-    stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/ymtarun/WebApp2026.git'
-            }
-        }
+environment {
+LANG = 'en_US.UTF-8' LC_ALL = 'en_US.UTF-8'
+} // this has to be added only if you get an error saying UTF required is 8 but showing in ISO00009
 
-        stage('Build') {
-            steps {
-                sh 'mvn clean package'  // Run Maven build
-            }
-        }
 
-        stage('Test') {
-            steps {
-                sh 'mvn test'  // Run unit tests
-            }
-        }
+tools { maven 'Maven' // Ensure this matches the name configured in Jenkins
+}
+stages { stage('Checkout') { steps { git branch: 'master', url: 'Repository link'
+ 
+}
+}
 
-        
-        
-       
-        stage('Run Application') {
-            steps {
-                // Start the JAR application
-                sh 'java -jar target/MyMavenJenkinsPipeline-1.0-SNAPSHOT.jar'
-            }
-        }
 
-        
-    }
+stage('Build') { steps { sh 'mvn clean package' // Run Maven build
+}
+}
 
-    post {
-        success {
-            echo 'Build and deployment successful!'
-        }
-        failure {
-            echo 'Build failed!'
-        }
-    }
+
+stage('Archive') { steps { archiveArtifacts artifacts: 'target/*.war', fingerprint:true
+}
+}
+stage('Deploy') { steps { sh 'mvn clean package' sh 'ansible- playbook ansible/playbook.yml -i ansible/hosts.ini'
+}
+}
+}
 }

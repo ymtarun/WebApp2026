@@ -1,0 +1,7 @@
+- name : opening github in localhost
+  localhost : local 
+  become : no
+  tasks :
+	- name: open git in chrome
+	  command: chrome driver "Get link"
+	  ignore-errors : Yes

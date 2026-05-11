@@ -1,0 +1,28 @@
+Pipeline{
+	any agent 
+	tools{
+		maven 'Maven'
+		}
+	Stages{
+		stage('checkout'){
+		steps{
+		 git branch: 'main',url: 'git link'
+		 }
+	}
+	Stage('Build'){
+		steps{
+			sh 'mvn clean pacakage'
+			}
+		}
+	Stage('Test'){
+		steps{
+			sh 'mvn test'
+			}
+		}
+	}
+	Post{
+		steps{
+			echo "succefully add"
+			}
+			}
+			}

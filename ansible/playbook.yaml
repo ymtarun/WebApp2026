@@ -1,0 +1,17 @@
+---
+- name: Deploy to Tomcat
+  hosts: web
+  become: yes
+
+  tasks:
+    - name: Copy WAR file to Tomcat
+      copy:
+        src: "/var/lib/jenkins/workspace/target/WebApp2026.war"
+        dest: "/opt/tomcat/webapps/WebApp2026.war"
+        mode: '0644'
+
+    - name: Restart Tomcat
+      systemd:
+        name: tomcat
+        state: restarted
+        enabled: yes
